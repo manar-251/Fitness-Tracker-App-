@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %> - Workout Tracker</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/dashboard">
+                <i class="fas fa-dumbbell"></i> Workout Tracker
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/dashboard">
+                            <i class="fas fa-tachometer-alt"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/workouts">
+                            <i class="fas fa-list"></i> My Workouts
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/workouts/new">
+                            <i class="fas fa-plus"></i> Add Workout
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/dashboard/stats">
+                            <i class="fas fa-chart-bar"></i> Statistics
+                        </a>
+                    </li>
+                </ul>
+                
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user"></i> Account
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <form action="/auth/signout" method="POST" class="d-inline">
+                                    <button type="submit" class="dropdown-item">
+                                        <i class="fas fa-sign-out-alt"></i> Sign Out
+                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container my-4">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="mb-0">
+                            <i class="fas fa-plus"></i> Add New Workout
+                        </h4>
+                    </div>
+                    <div class="card-body">
+                        <% if (errors.length > 0) { %>
+                            <div class="alert alert-danger">
+                                <% errors.forEach(error => { %>
+                                    <div><%= error.msg %></div>
+                                <% }) %>
+                            </div>
+                        <% } %>
+
+                        <form action="/workouts" method="POST" enctype="multipart/form-data">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="type" class="form-label">Workout Type <span class="text-danger">*</span></label>
+                                    <select class="form-select" id="type" name="type" required>
+                                        <option value="">Select workout type</option>
+                                        <% workoutTypes.forEach(type => { %>
+                                            <option value="<%= type %>" <%= formData.type === type ? 'selected' : '' %>>
+                                                <%= type %>
+                                            </option>
+                                        <% }) %>
+                                    </select>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="duration" class="form-label">Duration (minutes) <span class="text-danger">*</span></label>
+                                    <input type="number" class="form-control" id="duration" name="duration" 
+                                           min="1" value="<%= formData.duration %>" required>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="date" class="form-label">Date <span class="text-danger">*</span></label>
+                                <input type="date" class="form-control" id="date" name="date" 
+                                       value="<%= formData.date %>" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="tags" class="form-label">Tags</label>
+                                <input type="text" class="form-control" id="tags" name="tags" 
+                                       placeholder="Enter tags separated by commas (e.g., legs, cardio, HIIT)" 
+                                       value="<%= formData.tags || '' %>">
+                                <small class="text-muted">Optional: Add tags to categorize your workout</small>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="notes" class="form-label">Notes</label>
+                                <textarea class="form-control" id="notes" name="notes" rows="4" 
+                                          placeholder="How did the workout go? Any observations or achievements?"><%= formData.notes %></textarea>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="photo" class="form-label">Photo</label>
+                                <input type="file" class="form-control" id="photo" name="photo" 
+                                       accept="image/*">
+                                <small class="text-muted">Optional: Add a progress photo or workout image (max 5MB)</small>
+                            </div>
+
+                            <div class="d-flex justify-content-between">
+                                <a href="/workouts" class="btn btn-secondary">
+                                    <i class="fas fa-arrow-left"></i> Back to Workouts
+                                </a>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save"></i> Save Workout
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Auto-focus on first empty field
+        document.addEventListener('DOMContentLoaded', function() {
+            const typeSelect = document.getElementById('type');
+            if (!typeSelect.value) {
+                typeSelect.focus();
+            }
+        });
+
+        // Preview uploaded image
+        document.getElementById('photo').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                // Remove existing preview
+                const existingPreview = document.getElementById('imagePreview');
+                if (existingPreview) {
+                    existingPreview.remove();
+                }
+
+                // Create new preview
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const preview = document.createElement('div');
+                    preview.id = 'imagePreview';
+                    preview.className = 'mt-2';
+                    preview.innerHTML = `
+                        <img src="${e.target.result}" class="img-thumbnail" style="max-width: 200px; max-height: 200px;">
+                        <p class="small text-muted mt-1">Preview</p>
+                    `;
+                    document.getElementById('photo').parentNode.appendChild(preview);
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+</body>
+</html>
