@@ -6,7 +6,7 @@ const router = express.Router();
 // Dashboard
 router.get('/', async (req, res) => {
   try {
-    const userId = req.session.userId;
+    const userId = req.session.user.userId;
     const now = new Date();
     
     // Recent workouts (last 5)
@@ -77,7 +77,7 @@ router.get('/', async (req, res) => {
     
     res.render('dashboard/index', {
       title: 'Dashboard',
-      userName: req.session.userName,
+      userName: req.session.user.userName,
       recentWorkouts,
       thisWeekMinutes,
       thisWeekSessions,
@@ -95,7 +95,7 @@ router.get('/', async (req, res) => {
 // Statistics page
 router.get('/stats', async (req, res) => {
   try {
-    const userId = req.session.userId;
+    const userId = req.session.user.userId;
     const period = req.query.period || 'month'; // week, month, year
     
     let startDate, endDate;

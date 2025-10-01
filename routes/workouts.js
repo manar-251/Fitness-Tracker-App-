@@ -49,7 +49,7 @@ router.get('/', async (req, res) => {
     const limit = 10;
     const skip = (page - 1) * limit;
     
-    let filter = { userId: req.session.userId };
+    let filter = { userId: req.session.user.userId };
     
     // Date range filter
     if (req.query.dateFrom && req.query.dateTo) {
@@ -126,7 +126,7 @@ router.post('/', upload.single('photo'), workoutValidation, async (req, res) => 
 
   try {
     const workoutData = {
-      userId: req.session.userId,
+      userId: req.session.user.userId,
       type: req.body.type,
       duration: parseInt(req.body.duration),
       date: new Date(req.body.date),
@@ -163,7 +163,7 @@ router.get('/:id', async (req, res) => {
   try {
     const workout = await Workout.findOne({
       _id: req.params.id,
-      userId: req.session.userId
+      userId: req.session.user.userId
     });
     
     if (!workout) {
@@ -185,7 +185,7 @@ router.get('/:id/edit', async (req, res) => {
   try {
     const workout = await Workout.findOne({
       _id: req.params.id,
-      userId: req.session.userId
+      userId: req.session.user.userId
     });
     
     if (!workout) {
@@ -224,7 +224,7 @@ router.put('/:id', upload.single('photo'), workoutValidation, async (req, res) =
     try {
       const workout = await Workout.findOne({
         _id: req.params.id,
-        userId: req.session.userId
+        userId: req.session.user.userId
       });
       
       const workoutTypes = ['Cardio', 'Strength', 'Yoga', 'Running', 'Cycling', 'Swimming', 'Walking', 'HIIT', 'Other'];
@@ -245,7 +245,7 @@ router.put('/:id', upload.single('photo'), workoutValidation, async (req, res) =
   try {
     const workout = await Workout.findOne({
       _id: req.params.id,
-      userId: req.session.userId
+      userId: req.session.user.userId
     });
     
     if (!workout) {
@@ -284,7 +284,7 @@ router.delete('/:id', async (req, res) => {
   try {
     const result = await Workout.findOneAndDelete({
       _id: req.params.id,
-      userId: req.session.userId
+      userId: req.session.user.userId
     });
     
     if (!result) {
@@ -301,7 +301,7 @@ router.delete('/:id', async (req, res) => {
 // Export to CSV
 router.get('/export/csv', async (req, res) => {
   try {
-    let filter = { userId: req.session.userId };
+    let filter = { userId: req.session.user.userId };
     
     // Apply same filters as the list view
     if (req.query.dateFrom && req.query.dateTo) {

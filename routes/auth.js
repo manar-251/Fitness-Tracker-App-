@@ -46,7 +46,10 @@ router.post('/sign-in', [
       });
     }
 
-    req.session.user = { userId: user._id, userName : user.name }
+    req.session.user = { 
+      userId: user._id, 
+      userName : user.name 
+    }
 
      req.session.save(() => {
       res.redirect('/dashboard');
@@ -105,9 +108,14 @@ router.post('/sign-up', [
     const user = new User({ name, email, password });
     await user.save();
 
-    req.session.userId = user._id;
-    req.session.userName = user.name;
-    res.redirect('/dashboard');
+    req.session.user = { 
+      userId: user._id, 
+      userName : user.name 
+    }
+
+     req.session.save(() => {
+      res.redirect('/dashboard');
+    });
   } catch (error) {
     console.error('Sign up error:', error);
     res.render('auth/sign-up', {
