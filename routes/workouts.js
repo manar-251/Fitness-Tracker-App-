@@ -2,7 +2,7 @@ const express = require('express');
 const { body, validationResult } = require('express-validator');
 const multer = require('multer');
 const path = require('path');
-const Workout = require('../models/Workout');
+const Workout = require('../models/workout');
 
 const router = express.Router();
 
