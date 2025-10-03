@@ -28,3 +28,45 @@ Track streaks and view detailed statistics with charts
 📂 Planning Materials: [Link to planning docs] <!-- TODO: Add your planning document link -->
 
 Local Setup
+git clone <your-repo-url>
+cd workout-tracker
+npm install
+cp .env.example .env
+npm run dev
+
+
+🙌 Attributions
+
+This app uses the following external resources:
+-Bootstrap 5
+-Chart.js
+-Font Awesome
+-Multer
+
+🛠️ Technologies Used
+
+Backend: Node.js, Express.js
+
+Database: MongoDB with Mongoose
+
+Frontend: EJS, Bootstrap 5, Chart.js
+
+Authentication: bcrypt, express-session, connect-mongo
+
+Validation & Security: express-validator, method-override
+
+File Uploads: Multer
+
+📋 Next Steps
+
+Planned enhancements for future versions:
+
+📅 Calendar view of workouts
+
+🎯 Weekly fitness goals & progress tracking
+
+📧 Email reminders for planned workouts
+
+🌙 Dark mode theme
+
+🤝 Social features (share workouts with friends)
