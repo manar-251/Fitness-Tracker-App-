@@ -23,9 +23,9 @@ Track streaks and view detailed statistics with charts
 
 🚀 Getting Started
 
-🔗 Live App: [Deployed app link here] <!-- TODO: Add your Heroku/Render link -->
+🔗 Live App: 
 
-📂 Planning Materials: [Link to planning docs] <!-- TODO: Add your planning document link -->
+📂 Planning Materials: [Link to planning docs] 
 
 Local Setup
 git clone <your-repo-url>
